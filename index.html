@@ -453,23 +453,55 @@
 <td style="text-align:left"><span>“131”</span></td>
 </tr>
 </tbody>
-</table><h2 id="Etsycom" data-id="Etsycom"><a class="anchor hidden-xs" href="#Etsycom" title="Etsycom"><span class="octicon octicon-link"></span></a><a href="http://Etsy.com" target="_blank" rel="noopener"><span>Etsy.com</span></a></h2><p><span>Dane z serwisu etsy zostaną pozyskane przez webscrapping. Poprzez modyfikację linku &lt;etsyq=vanggogh&gt; uzyskujemy poniższą stronę:</span><br>
-<span>(screenshot)</span><br>
-<span>Zbieramy następujące dane:</span></p><ul>
-<li><span>total resulta</span></li>
-<li><span>Max Rating</span></li>
-<li><span>Min rating</span></li>
-<li><span>average rating</span></li>
-<li><span>Max price</span></li>
-<li><span>min price</span></li>
-<li><span>average price</span></li>
-</ul><p><span>Ze wzgledu na zasoby pamięciowe jakimi operujemy będziemy scrapować pierwszą (pierwsze 3?) strony i liczyć z nich dane zagregowane - min, max , average rating, price.</span></p><h1 id="Transformacja-danych-w-ETL" data-id="Transformacja-danych-w-ETL"><a class="anchor hidden-xs" href="#Transformacja-danych-w-ETL" title="Transformacja-danych-w-ETL"><span class="octicon octicon-link"></span></a><span>Transformacja danych w ETL</span></h1><p><span>TODO</span></p><ul>
+</table><h2 id="Etsycom" data-id="Etsycom"><a class="anchor hidden-xs" href="#Etsycom" title="Etsycom"><span class="octicon octicon-link"></span></a><a href="http://Etsy.com" target="_blank" rel="noopener"><span>Etsy.com</span></a></h2><p><span>Dane z serwisu etsy zostaną pozyskane przez webscrapping. Poprzez modyfikację linku “</span><a href="http://www.etsy.com/search?q=starry" target="_blank" rel="noopener"><span>www.etsy.com/search?q=starry</span></a><span> night” uzyskujemy poniższą stronę:</span><br>
+<img src="https://piotrpiatyszek.github.io/hurtownie-docs/starryNight.png" alt=""></p><p><span>Zbieramy następujące dane:</span></p><ul>
+<li><span>ResultsNumber</span></li>
+<li><span>MaxRating</span></li>
+<li><span>MinRating</span></li>
+<li><span>AverageRating</span></li>
+<li><span>MaxPrice</span></li>
+<li><span>MinPrice</span></li>
+<li><span>AveragePrice</span></li>
+</ul><p><span>Ze wzgledu na zasoby pamięciowe jakimi operujemy będziemy scrapować pierwszą stronę i liczyć z nich dane zagregowane - min, max, average rating, price.</span></p><h1 id="Transformacja-danych-w-ETL" data-id="Transformacja-danych-w-ETL"><a class="anchor hidden-xs" href="#Transformacja-danych-w-ETL" title="Transformacja-danych-w-ETL"><span class="octicon octicon-link"></span></a><span>Transformacja danych w ETL</span></h1><p><span>Dane z MET Muzeum wymagają transformacji:</span></p><ul>
 <li><span>zamiana dat na DateID</span></li>
 <li><span>zamiana lokalizacji na GeoID</span></li>
-<li><span>wyciągnięcie największego wymiaru produktu i przydzielenie kategorii wielkości</span></li>
-<li><span>wyczyszczenie płci</span></li>
+<li><span>znalezienie największego wymiaru dzieła sztuki i przydzielenie kategorii wielkości</span></li>
+<li><span>preprocessing kolumny z płcią</span></li>
 <li><span>zamiana zmiennych binarnych na dobrze opisane kategorie</span></li>
-</ul><h1 id="Model-hurtowni-danych-wraz-z-opisem-poszczególnych-komponentów" data-id="Model-hurtowni-danych-wraz-z-opisem-poszczególnych-komponentów"><a class="anchor hidden-xs" href="#Model-hurtowni-danych-wraz-z-opisem-poszczególnych-komponentów" title="Model-hurtowni-danych-wraz-z-opisem-poszczególnych-komponentów"><span class="octicon octicon-link"></span></a><span>Model hurtowni danych wraz z opisem poszczególnych komponentów</span></h1><p><img src="https://piotrpiatyszek.github.io/hurtownie-docs/er.svg" alt=""></p><h1 id="Warstwa-raportowa" data-id="Warstwa-raportowa"><a class="anchor hidden-xs" href="#Warstwa-raportowa" title="Warstwa-raportowa"><span class="octicon octicon-link"></span></a><span>Warstwa raportowa</span></h1></div>
+</ul><h1 id="Model-hurtowni-danych-wraz-z-opisem-poszczególnych-komponentów" data-id="Model-hurtowni-danych-wraz-z-opisem-poszczególnych-komponentów"><a class="anchor hidden-xs" href="#Model-hurtowni-danych-wraz-z-opisem-poszczególnych-komponentów" title="Model-hurtowni-danych-wraz-z-opisem-poszczególnych-komponentów"><span class="octicon octicon-link"></span></a><span>Model hurtowni danych wraz z opisem poszczególnych komponentów</span></h1><p><img src="https://piotrpiatyszek.github.io/hurtownie-docs/er.svg" alt=""></p><p><span>Tabelą faktową jest fakt wyszukania danego dzieła sztuki w serwisie Etsy. Zawiera ona </span><a href="http://m.in" target="_blank" rel="noopener"><span>m.in</span></a><span>.:</span></p><ul>
+<li><span>ilość produktów dla danego wyszukania</span></li>
+<li><span>Min, Max, Average Rating</span></li>
+<li><span>Min, Max, Average Price</span></li>
+<li><span>ArtID, ArtistID - klucze obce wymiarów Art i Artist</span></li>
+<li><span>SearchDateID - określający datę, kiedy zostało wykonane wyszukanie</span></li>
+<li><span>ArtOriginID - miejsce powstania danego dzieła sztuki</span></li>
+</ul><p><span>W hurtowni są 4 wymiary:</span></p><ul>
+<li><span>Date - służy jako outrigger dimention oraz role-playing dimention</span></li>
+<li><span>Art - opisuje dzieło sztuki:</span>
+<ul>
+<li><span>Tytuł</span></li>
+<li><span>PublicDomain - czy dzieło jest w domenie publicznej</span></li>
+<li><span>AccesionDateID - data przyjęcia dzieła do zbioru muzeum</span></li>
+<li><span>ObjectName - określające czym fizycznie jest dzieło - obraz, rzeźba, zegar itp.</span></li>
+<li><span>ObjectBeginDate, ObjectEndDate - kiedy dzieło powstawało</span></li>
+<li><span>Medium - materiał z jakiego zostało wykonane dzieło</span></li>
+<li><span>Size</span></li>
+<li><span>Classification - rodzaj sztuki(np. malarstwo, rzeźbiarstwo)</span></li>
+<li><span>Highlighted - czy dzieło jest zostało wyróżnione przez muzeum</span></li>
+<li><span>Departament - do jakiej kolekcji dzieło przynależy</span></li>
+<li><span>Culture, Period - kultura oraz okres z którego pochodzi dzieło</span></li>
+</ul>
+</li>
+<li><span>Artist</span>
+<ul>
+<li><span>ArtistDisplayName</span></li>
+<li><span>ArtistNationality</span></li>
+<li><span>ArtistBirthDate, ArtistDeathDate</span></li>
+<li><span>ArtistGender</span></li>
+</ul>
+</li>
+<li><span>Geo - z dokładnością do kodu pocztowego</span></li>
+</ul><h1 id="Warstwa-raportowa" data-id="Warstwa-raportowa"><a class="anchor hidden-xs" href="#Warstwa-raportowa" title="Warstwa-raportowa"><span class="octicon octicon-link"></span></a><span>Warstwa raportowa</span></h1></div>
     <div class="ui-toc dropup unselectable hidden-print" style="display:none;">
         <div class="pull-right dropdown">
             <a id="tocLabel" class="ui-toc-label btn btn-default" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" title="Table of content">
@@ -478,17 +510,17 @@
             <ul id="ui-toc" class="ui-toc-dropdown dropdown-menu" aria-labelledby="tocLabel">
                 <div class="toc"><ul class="nav">
 <li class=""><a href="#Peter-Bruigel-Starszy-amp-Młodszy" title="Peter Bruigel Starszy &amp; Młodszy">Peter Bruigel Starszy &amp; Młodszy</a></li>
-<li class=""><a href="#Wprowadzenie" title="Wprowadzenie">Wprowadzenie</a><ul class="nav">
+<li><a href="#Wprowadzenie" title="Wprowadzenie">Wprowadzenie</a><ul class="nav">
 <li><a href="#Cel-projektu-oraz-korzyści-biznesowy" title="Cel projektu oraz korzyści biznesowy">Cel projektu oraz korzyści biznesowy</a></li>
 </ul>
 </li>
-<li class=""><a href="#Diagram-i-opis-planowanej-architektury-rozwiązania" title="Diagram i opis planowanej architektury rozwiązania">Diagram i opis planowanej architektury rozwiązania</a></li>
-<li class=""><a href="#Opis-wykorzystywanych-zbiorów-danych" title="Opis wykorzystywanych zbiorów danych">Opis wykorzystywanych zbiorów danych</a><ul class="nav">
-<li class=""><a href="#MET-Museum" title="MET Museum">MET Museum</a></li>
-<li class=""><a href="#Etsycom" title="Etsy.com">Etsy.com</a></li>
+<li><a href="#Diagram-i-opis-planowanej-architektury-rozwiązania" title="Diagram i opis planowanej architektury rozwiązania">Diagram i opis planowanej architektury rozwiązania</a></li>
+<li><a href="#Opis-wykorzystywanych-zbiorów-danych" title="Opis wykorzystywanych zbiorów danych">Opis wykorzystywanych zbiorów danych</a><ul class="nav">
+<li><a href="#MET-Museum" title="MET Museum">MET Museum</a></li>
+<li><a href="#Etsycom" title="Etsy.com">Etsy.com</a></li>
 </ul>
 </li>
-<li class=""><a href="#Transformacja-danych-w-ETL" title="Transformacja danych w ETL">Transformacja danych w ETL</a></li>
+<li><a href="#Transformacja-danych-w-ETL" title="Transformacja danych w ETL">Transformacja danych w ETL</a></li>
 <li><a href="#Model-hurtowni-danych-wraz-z-opisem-poszczególnych-komponentów" title="Model hurtowni danych wraz z opisem poszczególnych komponentów">Model hurtowni danych wraz z opisem poszczególnych komponentów</a></li>
 <li><a href="#Warstwa-raportowa" title="Warstwa raportowa">Warstwa raportowa</a></li>
 </ul>
@@ -499,17 +531,17 @@
     <div id="ui-toc-affix" class="ui-affix-toc ui-toc-dropdown unselectable hidden-print" data-spy="affix" style="top:17px;display:none;" null null>
         <div class="toc"><ul class="nav">
 <li class=""><a href="#Peter-Bruigel-Starszy-amp-Młodszy" title="Peter Bruigel Starszy &amp; Młodszy">Peter Bruigel Starszy &amp; Młodszy</a></li>
-<li class=""><a href="#Wprowadzenie" title="Wprowadzenie">Wprowadzenie</a><ul class="nav">
+<li><a href="#Wprowadzenie" title="Wprowadzenie">Wprowadzenie</a><ul class="nav">
 <li><a href="#Cel-projektu-oraz-korzyści-biznesowy" title="Cel projektu oraz korzyści biznesowy">Cel projektu oraz korzyści biznesowy</a></li>
 </ul>
 </li>
-<li class=""><a href="#Diagram-i-opis-planowanej-architektury-rozwiązania" title="Diagram i opis planowanej architektury rozwiązania">Diagram i opis planowanej architektury rozwiązania</a></li>
-<li class=""><a href="#Opis-wykorzystywanych-zbiorów-danych" title="Opis wykorzystywanych zbiorów danych">Opis wykorzystywanych zbiorów danych</a><ul class="nav">
-<li class=""><a href="#MET-Museum" title="MET Museum">MET Museum</a></li>
-<li class=""><a href="#Etsycom" title="Etsy.com">Etsy.com</a></li>
+<li><a href="#Diagram-i-opis-planowanej-architektury-rozwiązania" title="Diagram i opis planowanej architektury rozwiązania">Diagram i opis planowanej architektury rozwiązania</a></li>
+<li><a href="#Opis-wykorzystywanych-zbiorów-danych" title="Opis wykorzystywanych zbiorów danych">Opis wykorzystywanych zbiorów danych</a><ul class="nav">
+<li><a href="#MET-Museum" title="MET Museum">MET Museum</a></li>
+<li><a href="#Etsycom" title="Etsy.com">Etsy.com</a></li>
 </ul>
 </li>
-<li class=""><a href="#Transformacja-danych-w-ETL" title="Transformacja danych w ETL">Transformacja danych w ETL</a></li>
+<li><a href="#Transformacja-danych-w-ETL" title="Transformacja danych w ETL">Transformacja danych w ETL</a></li>
 <li><a href="#Model-hurtowni-danych-wraz-z-opisem-poszczególnych-komponentów" title="Model hurtowni danych wraz z opisem poszczególnych komponentów">Model hurtowni danych wraz z opisem poszczególnych komponentów</a></li>
 <li><a href="#Warstwa-raportowa" title="Warstwa raportowa">Warstwa raportowa</a></li>
 </ul>
